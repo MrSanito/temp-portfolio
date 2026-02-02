@@ -1,119 +1,171 @@
 "use client";
 
+import { projectsData, getRandomExcuse, Project } from "@/lib/projects";
 import { motion } from "framer-motion";
-import { Trophy } from "lucide-react";
+import { FiCode, FiGithub, FiExternalLink } from "react-icons/fi";
+import { useState, useEffect } from "react";
+import Image from "next/image";
 import GithubZone from "./GithubZone";
 
+const statusColors = {
+    deployed: "bg-green-500 shadow-[0_0_10px_#22c55e]",
+    built: "bg-yellow-500 shadow-[0_0_10px_#eab308]",
+    building: "bg-red-500 shadow-[0_0_10px_#ef4444]"
+};
+
+const statusLabels = {
+    deployed: "Deployed",
+    built: "Built (Not Deployed)",
+    building: "Building"
+};
+
 export default function BentoGrid() {
-  return (
-    <section id="projects" className="py-32 px-6">
-      <div className="max-w-7xl mx-auto space-y-16">
-         <motion.div 
-           initial={{ opacity: 0, y: 20 }}
-           whileInView={{ opacity: 1, y: 0 }}
-           viewport={{ once: true }}
-           className="flex flex-col gap-4"
-         >
-           <h2 className="text-4xl md:text-6xl font-bold tracking-tighter">Selected <span className="text-purple-500">Works</span></h2>
-         </motion.div>
+    const projects = projectsData;
+    const [excuse, setExcuse] = useState("");
 
-         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[400px]">
-           {/* Main Project - Large Card (Span 2 cols) */}
-           <motion.div
-             initial={{ opacity: 0, scale: 0.95 }}
-             whileInView={{ opacity: 1, scale: 1 }}
-             viewport={{ once: true }}
-             className="md:col-span-2 row-span-1 group relative rounded-3xl border border-white/10 bg-zinc-900/50 overflow-hidden hover:border-purple-500/50 transition-all duration-500"
-           >
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              
-              <div className="h-full flex flex-col justify-between p-8 md:p-12 relative z-10">
-                 <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                       <div className="p-2 rounded-lg bg-purple-500/20 text-purple-300">
-                         <Trophy className="w-6 h-6" />
-                       </div>
-                       <h3 className="text-3xl font-bold">Quiz Master Turbo</h3>
-                    </div>
-                    <p className="text-muted-foreground text-lg max-w-md">
-                      A real-time comprehensive quiz platform with live analytics and dashboard. Built for scalability.
+    useEffect(() => {
+        setExcuse(getRandomExcuse());
+    }, []);
+
+    return (
+        <section id="projects" className="py-24 px-6">
+            <div className="max-w-7xl mx-auto space-y-16">
+                <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="flex flex-col gap-4"
+                >
+                    <h2 className="text-4xl md:text-6xl font-bold tracking-tighter">
+                        Selected <span className="text-purple-500">Works</span>
+                    </h2>
+                    <p className="text-muted-foreground text-lg max-w-2xl">
+                        A showcase of my technical journey. From full-stack applications to experimental ideas.
                     </p>
-                 </div>
+                </motion.div>
 
-                 <div className="space-y-6">
-                    <div className="flex flex-wrap gap-2">
-                      {["Next.js", "TypeScript", "PostgreSQL", "Turborepo"].map(t => (
-                         <span key={t} className="px-3 py-1 rounded-full bg-white/10 border border-white/5 text-xs font-medium">
-                            {t}
-                         </span>
-                      ))}
-                    </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {projects.map((project, index) => (
+                        <motion.div
+                            key={project.id}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: index * 0.1 }}
+                            className="group bg-zinc-900/50 border border-white/10 rounded-3xl overflow-hidden hover:border-purple-500/50 hover:shadow-2xl transition-all duration-300 flex flex-col"
+                        >
+                            {/* Project Image / Placeholder */}
+                            <div className="relative h-64 w-full bg-gradient-to-br from-zinc-800 to-black overflow-hidden group-hover:bg-zinc-800/80 transition-colors">
+                                <div className={`absolute top-4 left-4 z-20 ${statusColors[project.status].split(" ")[0]} w-2 h-2 rounded-full animate-pulse`} />
+                                <span className="absolute top-3 left-8 z-20 text-[10px] font-bold uppercase tracking-wider text-white/90 bg-black/60 px-2 py-1 rounded-full border border-white/10 backdrop-blur-md">
+                                    {statusLabels[project.status]}
+                                </span>
+
+                                {project.image_url ? (
+                                    <Image
+                                        src={project.image_url}
+                                        alt={project.title}
+                                        fill
+                                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                    />
+                                ) : (
+                                    <div className="absolute inset-0 flex items-center justify-center flex-col p-6">
+                                        <div className="absolute inset-0 bg-grid-white/[0.02]" />
+                                        <FiCode className="w-12 h-12 text-white/20 mx-auto mb-2 group-hover:text-purple-500 transition-colors transform group-hover:scale-110 duration-300" />
+                                        <span className="text-white/40 font-mono text-sm tracking-widest uppercase">Project Preview</span>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="p-8 flex-1 flex flex-col justify-between">
+                                <div className="space-y-4">
+                                    <div className="flex justify-between items-start">
+                                        <h3 className="text-2xl font-bold group-hover:text-purple-400 transition-colors">
+                                            {project.title}
+                                        </h3>
+                                    </div>
+
+                                    <p className="text-muted-foreground leading-relaxed">
+                                        {project.description}
+                                    </p>
+
+                                    <div className="flex flex-wrap gap-2 pt-2">
+                                        {project.tech_stack.map((tech) => (
+                                            <span 
+                                                key={tech} 
+                                                className="px-3 py-1 rounded-full bg-white/5 border border-white/5 text-xs font-medium text-purple-200/80"
+                                            >
+                                                {tech}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="flex gap-4 pt-8 mt-auto border-t border-white/5">
+                                    {project.github_link ? (
+                                        <a
+                                            href={project.github_link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex items-center gap-2 text-sm font-bold text-white hover:text-purple-400 transition-colors"
+                                        >
+                                            <FiGithub /> Source Code
+                                        </a>
+                                    ) : (
+                                        <span className="flex items-center gap-2 text-sm font-medium text-muted-foreground/50 cursor-not-allowed">
+                                            <FiGithub /> Private Repo
+                                        </span>
+                                    )}
+
+                                    {project.demo_link ? (
+                                        <a
+                                            href={project.demo_link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex items-center gap-2 text-sm font-bold text-white hover:text-purple-400 transition-colors"
+                                        >
+                                            <FiExternalLink /> Live Demo
+                                        </a>
+                                    ) : (
+                                        <span className="flex items-center gap-2 text-sm font-medium text-muted-foreground/50 cursor-not-allowed">
+                                            <FiExternalLink /> In Progress
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+                        </motion.div>
+                    ))}
+
+                    {/* Coming Soon Card */} 
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        className="group bg-zinc-900/30 border border-white/5 border-dashed rounded-3xl p-8 flex flex-col items-center justify-center text-center space-y-6 hover:bg-zinc-900/50 transition-colors min-h-[400px]"
+                    >
+                         <div className="text-5xl mb-2 grayscale group-hover:grayscale-0 transition-all duration-500">🏗️</div>
+                         <div className="space-y-2">
+                             <h3 className="text-2xl font-bold">More Cooking...</h3>
+                             <p className="text-muted-foreground max-w-xs mx-auto italic">
+                                &quot;{excuse}&quot;
+                             </p>
+                         </div>
+                    </motion.div>
                     
-                    <div className="flex gap-4">
-                      <a 
-                        href="https://quiz-master-turbo-quiz-master.vercel.app/dashboard"
-                        target="_blank" 
-                        rel="noreferrer"
-                        className="px-6 py-2 rounded-full bg-white text-black font-semibold hover:bg-white/90 transition-colors"
-                      >
-                         Live Demo
-                      </a>
-                      <a 
-                        href="https://github.com/MrSanito/quizMasterTurbo"
-                        target="_blank"
-                        rel="noreferrer"
-                        className="px-6 py-2 rounded-full border border-white/20 hover:bg-white/10 transition-colors"
-                      >
-                         Source Code
-                      </a>
-                    </div>
-                 </div>
-              </div>
-
-              {/* Decorative Image/Pattern */}
-              <div className="absolute right-[-20%] bottom-[-20%] w-[300px] h-[300px] bg-purple-500/30 rounded-full blur-[80px] pointer-events-none" />
-           </motion.div>
-
-           {/* Github Stats Card */}
-           <motion.div
-             initial={{ opacity: 0, scale: 0.95 }}
-             whileInView={{ opacity: 1, scale: 1 }}
-             viewport={{ once: true }}
-             transition={{ delay: 0.1 }}
-             className="md:col-span-1 row-span-1 rounded-3xl border border-white/10 bg-zinc-900/50 p-8 flex flex-col justify-between hover:border-white/20 transition-colors relative overflow-hidden"
-           >
-              <div className="absolute top-0 right-0 p-32 bg-green-500/10 rounded-full blur-[60px]" />
-              <GithubZone />
-           </motion.div>
-
-           {/* Tech Stack Card - Bento item */}
-           <motion.div
-             initial={{ opacity: 0, scale: 0.95 }}
-             whileInView={{ opacity: 1, scale: 1 }}
-             viewport={{ once: true }}
-             transition={{ delay: 0.2 }}
-             className="md:col-span-3 row-span-1 md:h-[300px] rounded-3xl border border-white/10 bg-gradient-to-r from-zinc-900 via-zinc-900 to-black p-10 flex items-center justify-center relative overflow-hidden"
-           >
-              <div className="absolute inset-0 flex items-center justify-center opacity-30">
-                 <div className="w-[150%] h-[150%] bg-[repeating-linear-gradient(45deg,transparent,transparent_20px,#333_20px,#333_21px)] opacity-10"></div>
-              </div>
-              
-              <div className="text-center z-10 max-w-2xl">
-                 <h3 className="text-3xl font-bold mb-4">Ready to Collaborate?</h3>
-                 <p className="text-muted-foreground mb-6 text-lg">
-                    I'm currently open to new opportunities and interesting projects.
-                    Whether you have a question or just want to say hi, I'll try my best to get back to you!
-                 </p>
-                 <a 
-                   href="mailto:hello@mrsanito.com"
-                   className="inline-flex px-8 py-3 rounded-full bg-white text-black font-bold hover:bg-gray-200 transition-colors"
-                 >
-                    Say Hello
-                 </a>
-              </div>
-           </motion.div>
-         </div>
-      </div>
-    </section>
-  );
+                    {/* Github Stats Card */}
+                     <motion.div
+                       initial={{ opacity: 0, scale: 0.95 }}
+                       whileInView={{ opacity: 1, scale: 1 }}
+                       viewport={{ once: true }}
+                       transition={{ delay: 0.1 }}
+                       className="md:col-span-2 lg:col-span-3 rounded-3xl border border-white/10 bg-zinc-900/50 p-8 flex flex-col justify-between hover:border-white/20 transition-colors relative overflow-hidden"
+                     >
+                        <div className="absolute top-0 right-0 p-32 bg-green-500/10 rounded-full blur-[60px]" />
+                        <GithubZone />
+                     </motion.div>
+                </div>
+            </div>
+        </section>
+    );
 }
