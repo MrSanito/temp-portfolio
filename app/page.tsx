@@ -196,7 +196,7 @@ export default function Portfolio() {
                     <div className="relative w-full h-full rounded-3xl overflow-hidden border-4 border-white/10 shadow-2xl bg-zinc-900">
                       {/* Using a Gojo Satoru style placeholder image */}
                       <img
-                          src="https://wallpapers-clan.com/wp-content/uploads/2023/02/jujutsu-kaisen-gojo-satoru-pfp-1.jpg"
+                          src="/gojo-v1.png"
                           alt="Profile"
                           className="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-500"
                       />
