@@ -240,7 +240,9 @@ export default function Portfolio() {
                 {/* Enhanced Clock Widget */}
                 <ClockWidget />
             </div>
-      </section>
+      </motion.div>
+    </div>
+  </section>
 
       {/* Infinite Marquee Skills */}
       <section className="py-20 border-y border-white/5 bg-black/40 backdrop-blur-sm overflow-hidden">
