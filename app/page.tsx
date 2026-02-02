@@ -6,6 +6,7 @@ import { Github, ExternalLink, Code2, Terminal, User, Trophy, Star, GitFork, Clo
 import { GitHubCalendar } from "react-github-calendar";
 import { cn } from "@/lib/utils";
 import GreetingFlipper from "./components/GreetingFlipper";
+import GithubZone from "./components/GithubZone";
 import { getDailyQuote } from "@/lib/data";
 
 // Inline ClockWidget for simplicity in this file
@@ -342,38 +343,7 @@ export default function Portfolio() {
                className="md:col-span-1 row-span-1 rounded-3xl border border-white/10 bg-zinc-900/50 p-8 flex flex-col justify-between hover:border-white/20 transition-colors relative overflow-hidden"
              >
                 <div className="absolute top-0 right-0 p-32 bg-green-500/10 rounded-full blur-[60px]" />
-                
-                <div>
-                  <h3 className="text-xl font-bold mb-2">GitHub Activity</h3>
-                  <p className="text-sm text-muted-foreground">Contributions over the last year</p>
-                </div>
-
-                <div className="mt-8 scale-90 origin-bottom-left -ml-4">
-                  <GitHubCalendar 
-                    username="MrSanito" 
-                    colorScheme="dark"
-                    fontSize={10}
-                    blockSize={8}
-                    blockMargin={4}
-                  />
-                </div>
-                
-                {profile && (
-                   <div className="mt-6 pt-6 border-t border-white/5 flex items-center justify-between">
-                      <div className="text-center">
-                         <div className="text-2xl font-bold text-white">{profile.public_repos}</div>
-                         <div className="text-xs text-muted-foreground">Repos</div>
-                      </div>
-                      <div className="text-center">
-                         <div className="text-2xl font-bold text-white">{profile.followers}</div>
-                         <div className="text-xs text-muted-foreground">Followers</div>
-                      </div>
-                      <div className="text-center">
-                         <div className="text-2xl font-bold text-white">2024</div>
-                         <div className="text-xs text-muted-foreground">Joined</div>
-                      </div>
-                   </div>
-                )}
+                <GithubZone />
              </motion.div>
 
              {/* Tech Stack Card - Bento item */}
