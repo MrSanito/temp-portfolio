@@ -104,7 +104,7 @@ export default function GithubZone() {
                     blockSize={11}
                     blockMargin={4}
                     fontSize={12}
-                    transformData={(data) => data.slice(-135)} 
+                    transformData={(data) => data.slice(-142  )} 
                 />
             </div>
          </div>
