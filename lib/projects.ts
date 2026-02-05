@@ -11,6 +11,16 @@ export interface Project {
 
 export const projectsData: Project[] = [
     {
+        id: "vte",
+        title: "Vishal Tools Enterprise",
+        description: "Precision Engineering Redefined. World-class industrial machinery and custom engineering solutions delivered globally.",
+        tech_stack: ["Next.js", "React", "Tailwind CSS"],
+        github_link: "https://github.com/MrSanito/vte",
+        demo_link: "https://www.vishaltoolsententerprise.in/",
+        image_url: "/project-vte.png",
+        status: "deployed"
+    },
+    {
         id: "quiz-master-turbo",
         title: "Quiz Master Turbo",
         description: "A real-time comprehensive quiz platform with live analytics, dashboard, and multiplayer support. Built for high scalability and performance.",
