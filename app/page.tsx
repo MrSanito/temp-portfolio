@@ -7,6 +7,7 @@ import SkillsMarquee from "./components/SkillsMarquee";
 import AboutSection from "./components/AboutSection";
 import BentoGrid from "./components/BentoGrid";
 import Footer from "./components/Footer";
+import ScrollReveal from "./components/ui/ScrollReveal";
 
 export default function Portfolio() {
   const quote = getDailyQuote();
@@ -18,10 +19,22 @@ export default function Portfolio() {
       
       <Navbar />
       <HeroSection quote={quote} />
-      <SkillsMarquee />
-      <AboutSection />
-      <BentoGrid />
-      <Footer />
+      
+      <ScrollReveal delay={0.2}>
+        <SkillsMarquee />
+      </ScrollReveal>
+
+      <ScrollReveal delay={0.3}>
+        <AboutSection />
+      </ScrollReveal>
+
+      <ScrollReveal delay={0.4}>
+        <BentoGrid />
+      </ScrollReveal>
+
+      <ScrollReveal delay={0.5}>
+        <Footer />
+      </ScrollReveal>
     </main>
   );
 }

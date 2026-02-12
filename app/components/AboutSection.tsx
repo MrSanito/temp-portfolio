@@ -3,6 +3,8 @@
 import { motion } from "framer-motion";
 import { FiTerminal, FiLock, FiDownload, FiZap, FiCode } from "react-icons/fi";
 import { techStackData, toolkitData } from "@/lib/icons";
+import MagneticButton from "./ui/MagneticButton";
+import SpotlightCard from "./ui/SpotlightCard";
 
 export default function AboutSection() {
     const bio = "I am a passionate Full Stack Developer with a deep interest in building scalable, efficient, and user-friendly applications. My journey involves constant learning and experimenting with new technologies to solve real-world problems. I thrive in collaborative environments and enjoy turning complex requirements into elegant solutions.";
@@ -104,14 +106,16 @@ export default function AboutSection() {
                                 </div>
 
                                 <div className="flex flex-col items-center gap-3 w-full md:w-auto">
-                                    <a
-                                        href="/resume.pdf"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="w-full flex items-center justify-center gap-2 bg-purple-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-purple-700 transition-all hover:scale-105 shadow-lg shadow-purple-500/20 whitespace-nowrap"
-                                    >
-                                        <FiDownload /> Download Resume
-                                    </a>
+                                    <MagneticButton className="w-full md:w-auto">
+                                        <a
+                                            href="/resume.pdf"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="w-full flex items-center justify-center gap-2 bg-purple-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-purple-700 transition-all shadow-lg shadow-purple-500/20 whitespace-nowrap"
+                                        >
+                                            <FiDownload /> Download Resume
+                                        </a>
+                                    </MagneticButton>
                                 </div>
                             </div>
                         </motion.div>
@@ -132,23 +136,25 @@ export default function AboutSection() {
                                         whileInView={{ opacity: 1, scale: 1 }}
                                         viewport={{ once: false }}
                                         transition={{ delay: idx * 0.05, duration: 0.3 }}
-                                        className="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl p-5 hover:border-purple-500/30 transition-all shadow-sm group"
+                                        className="h-full"
                                     >
-                                        <h4 className="text-xs font-bold text-purple-400 mb-4 uppercase tracking-wider">{stack.category}</h4>
-                                        <div className="flex flex-wrap gap-4">
-                                            {stack.items.map((item) => (
-                                                <a
-                                                    key={item.name}
-                                                    href={item.url}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className={`text-2xl transition-all hover:scale-110 ${item.color}`}
-                                                    title={item.name}
-                                                >
-                                                    <item.icon />
-                                                </a>
-                                            ))}
-                                        </div>
+                                        <SpotlightCard className="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl p-5 hover:border-purple-500/30 transition-all shadow-sm group h-full">
+                                            <h4 className="text-xs font-bold text-purple-400 mb-4 uppercase tracking-wider">{stack.category}</h4>
+                                            <div className="flex flex-wrap gap-4">
+                                                {stack.items.map((item) => (
+                                                    <a
+                                                        key={item.name}
+                                                        href={item.url}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className={`text-2xl transition-all hover:scale-110 ${item.color}`}
+                                                        title={item.name}
+                                                    >
+                                                        <item.icon />
+                                                    </a>
+                                                ))}
+                                            </div>
+                                        </SpotlightCard>
                                     </motion.div>
                                 ))}
                             </div>

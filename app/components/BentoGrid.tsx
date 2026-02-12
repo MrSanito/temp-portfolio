@@ -6,6 +6,7 @@ import { FiCode, FiGithub, FiExternalLink } from "react-icons/fi";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import GithubZone from "./GithubZone";
+import SpotlightCard from "./ui/SpotlightCard";
 
 const statusColors = {
     deployed: "bg-green-500 shadow-[0_0_10px_#22c55e]",
@@ -52,88 +53,90 @@ export default function BentoGrid() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.1 }}
-                            className="group bg-zinc-900/50 border border-white/10 rounded-3xl overflow-hidden hover:border-purple-500/50 hover:shadow-2xl transition-all duration-300 flex flex-col"
+                            className="h-full" // Ensure motion div takes height for grid
                         >
-                            {/* Project Image / Placeholder */}
-                            <div className="relative h-64 w-full bg-gradient-to-br from-zinc-800 to-black overflow-hidden group-hover:bg-zinc-800/80 transition-colors">
-                                <div className={`absolute top-4 left-4 z-20 ${statusColors[project.status].split(" ")[0]} w-2 h-2 rounded-full animate-pulse`} />
-                                <span className="absolute top-3 left-8 z-20 text-[10px] font-bold uppercase tracking-wider text-white/90 bg-black/60 px-2 py-1 rounded-full border border-white/10 backdrop-blur-md">
-                                    {statusLabels[project.status]}
-                                </span>
-
-                                {project.image_url ? (
-                                    <Image
-                                        src={project.image_url}
-                                        alt={project.title}
-                                        fill
-                                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                    />
-                                ) : (
-                                    <div className="absolute inset-0 flex items-center justify-center flex-col p-6">
-                                        <div className="absolute inset-0 bg-grid-white/[0.02]" />
-                                        <FiCode className="w-12 h-12 text-white/20 mx-auto mb-2 group-hover:text-purple-500 transition-colors transform group-hover:scale-110 duration-300" />
-                                        <span className="text-white/40 font-mono text-sm tracking-widest uppercase">Project Preview</span>
+                            <SpotlightCard className="group bg-zinc-900/50 border border-white/10 rounded-3xl overflow-hidden hover:border-purple-500/50 hover:shadow-2xl transition-all duration-300 flex flex-col h-full">
+                                {/* Project Image / Placeholder */}
+                                <div className="relative h-64 w-full bg-gradient-to-br from-zinc-800 to-black overflow-hidden group-hover:bg-zinc-800/80 transition-colors">
+                                    <div className={`absolute top-4 left-4 z-20 ${statusColors[project.status].split(" ")[0]} w-2 h-2 rounded-full animate-pulse`} />
+                                    <span className="absolute top-3 left-8 z-20 text-[10px] font-bold uppercase tracking-wider text-white/90 bg-black/60 px-2 py-1 rounded-full border border-white/10 backdrop-blur-md">
+                                        {statusLabels[project.status]}
+                                    </span>
+    
+                                    {project.image_url ? (
+                                        <Image
+                                            src={project.image_url}
+                                            alt={project.title}
+                                            fill
+                                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                        />
+                                    ) : (
+                                        <div className="absolute inset-0 flex items-center justify-center flex-col p-6">
+                                            <div className="absolute inset-0 bg-grid-white/[0.02]" />
+                                            <FiCode className="w-12 h-12 text-white/20 mx-auto mb-2 group-hover:text-purple-500 transition-colors transform group-hover:scale-110 duration-300" />
+                                            <span className="text-white/40 font-mono text-sm tracking-widest uppercase">Project Preview</span>
+                                        </div>
+                                    )}
+                                </div>
+    
+                                <div className="p-8 flex-1 flex flex-col justify-between">
+                                    <div className="space-y-4">
+                                        <div className="flex justify-between items-start">
+                                            <h3 className="text-2xl font-bold group-hover:text-purple-400 transition-colors">
+                                                {project.title}
+                                            </h3>
+                                        </div>
+    
+                                        <p className="text-muted-foreground leading-relaxed">
+                                            {project.description}
+                                        </p>
+    
+                                        <div className="flex flex-wrap gap-2 pt-2">
+                                            {project.tech_stack.map((tech) => (
+                                                <span 
+                                                    key={tech} 
+                                                    className="px-3 py-1 rounded-full bg-white/5 border border-white/5 text-xs font-medium text-purple-200/80"
+                                                >
+                                                    {tech}
+                                                </span>
+                                            ))}
+                                        </div>
                                     </div>
-                                )}
-                            </div>
-
-                            <div className="p-8 flex-1 flex flex-col justify-between">
-                                <div className="space-y-4">
-                                    <div className="flex justify-between items-start">
-                                        <h3 className="text-2xl font-bold group-hover:text-purple-400 transition-colors">
-                                            {project.title}
-                                        </h3>
-                                    </div>
-
-                                    <p className="text-muted-foreground leading-relaxed">
-                                        {project.description}
-                                    </p>
-
-                                    <div className="flex flex-wrap gap-2 pt-2">
-                                        {project.tech_stack.map((tech) => (
-                                            <span 
-                                                key={tech} 
-                                                className="px-3 py-1 rounded-full bg-white/5 border border-white/5 text-xs font-medium text-purple-200/80"
+    
+                                    <div className="flex gap-4 pt-8 mt-auto border-t border-white/5">
+                                        {project.github_link ? (
+                                            <a
+                                                href={project.github_link}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex items-center gap-2 text-sm font-bold text-white hover:text-purple-400 transition-colors"
                                             >
-                                                {tech}
+                                                <FiGithub /> Source Code
+                                            </a>
+                                        ) : (
+                                            <span className="flex items-center gap-2 text-sm font-medium text-muted-foreground/50 cursor-not-allowed">
+                                                <FiGithub /> Private Repo
                                             </span>
-                                        ))}
+                                        )}
+    
+                                        {project.demo_link ? (
+                                            <a
+                                                href={project.demo_link}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex items-center gap-2 text-sm font-bold text-white hover:text-purple-400 transition-colors"
+                                            >
+                                                <FiExternalLink /> Live Demo
+                                            </a>
+                                        ) : (
+                                            <span className="flex items-center gap-2 text-sm font-medium text-muted-foreground/50 cursor-not-allowed">
+                                                <FiExternalLink /> In Progress
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
-
-                                <div className="flex gap-4 pt-8 mt-auto border-t border-white/5">
-                                    {project.github_link ? (
-                                        <a
-                                            href={project.github_link}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex items-center gap-2 text-sm font-bold text-white hover:text-purple-400 transition-colors"
-                                        >
-                                            <FiGithub /> Source Code
-                                        </a>
-                                    ) : (
-                                        <span className="flex items-center gap-2 text-sm font-medium text-muted-foreground/50 cursor-not-allowed">
-                                            <FiGithub /> Private Repo
-                                        </span>
-                                    )}
-
-                                    {project.demo_link ? (
-                                        <a
-                                            href={project.demo_link}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex items-center gap-2 text-sm font-bold text-white hover:text-purple-400 transition-colors"
-                                        >
-                                            <FiExternalLink /> Live Demo
-                                        </a>
-                                    ) : (
-                                        <span className="flex items-center gap-2 text-sm font-medium text-muted-foreground/50 cursor-not-allowed">
-                                            <FiExternalLink /> In Progress
-                                        </span>
-                                    )}
-                                </div>
-                            </div>
+                            </SpotlightCard>
                         </motion.div>
                     ))}
 

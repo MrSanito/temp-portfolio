@@ -4,6 +4,10 @@ import { motion } from "framer-motion";
 import { Code2, Terminal, User, Trophy, ExternalLink } from "lucide-react";
 import GreetingFlipper from "./GreetingFlipper";
 import ClockWidget from "./ClockWidget";
+import ScrambleText from "./ui/ScrambleText";
+import MagneticButton from "./ui/MagneticButton";
+import TiltCard from "./ui/TiltCard";
+import ScrollReveal from "./ui/ScrollReveal";
 
 interface HeroSectionProps {
   quote: string;
@@ -44,7 +48,7 @@ export default function HeroSection({ quote }: HeroSectionProps) {
                     </div>
                     <h1 className="text-5xl md:text-7xl font-bold tracking-tighter flex flex-col gap-2">
                         <span className="block">
-                            I am <span className="text-primary bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-indigo-500">Vishal</span>
+                            I am <ScrambleText text="Vishal" className="text-primary bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-indigo-500" />
                         </span>
                     </h1>
                     <div className="flex flex-col gap-1 items-center md:items-start text-muted-foreground">
@@ -57,32 +61,42 @@ export default function HeroSection({ quote }: HeroSectionProps) {
                     </div>
                   </div>
 
-                  {/* Symmetric CTA Grid */}
                   <div className="grid grid-cols-2 gap-4 w-full max-w-md mx-auto md:mx-0">
-                      <a
-                          href="#about"
-                          className="group flex items-center justify-center gap-2 bg-secondary/50 border border-white/5 hover:border-purple-500/30 text-secondary-foreground px-6 py-4 rounded-xl font-medium hover:bg-secondary/80 transition-all hover:scale-105 shadow-sm"
-                      >
-                          About Me <User className="w-4 h-4 group-hover:text-purple-400" />
-                      </a>
-                      <a
-                          href="#achievements"
-                          className="group flex items-center justify-center gap-2 bg-primary/10 border border-primary/20 text-primary-foreground px-6 py-4 rounded-xl font-medium hover:bg-primary/20 transition-all hover:scale-105 shadow-lg shadow-primary/5"
-                      >
-                          Achievements <Trophy className="w-4 h-4 group-hover:text-purple-400" />
-                      </a>
-                      <a
-                          href="#projects"
-                          className="group flex items-center justify-center gap-2 bg-primary text-white px-6 py-4 rounded-xl font-medium hover:bg-primary/90 transition-all hover:scale-105 shadow-lg shadow-primary/20"
-                      >
-                          Projects <Code2 className="w-4 h-4" />
-                      </a>
-                      <a
-                          href="#socials"
-                          className="group flex items-center justify-center gap-2 bg-secondary/50 border border-white/5 hover:border-purple-500/30 text-secondary-foreground px-6 py-4 rounded-xl font-medium hover:bg-secondary/80 transition-all hover:scale-105 shadow-sm"
-                      >
-                          Connect <ExternalLink className="w-4 h-4 group-hover:text-purple-400" />
-                      </a>
+                      <MagneticButton>
+                        <a
+                            href="#about"
+                            className="group flex items-center justify-center gap-2 bg-secondary/50 border border-white/5 hover:border-purple-500/30 text-secondary-foreground px-6 py-4 rounded-xl font-medium hover:bg-secondary/80 transition-all shadow-sm w-full"
+                        >
+                            About Me <User className="w-4 h-4 group-hover:text-purple-400" />
+                        </a>
+                      </MagneticButton>
+                      
+                      <MagneticButton>
+                        <a
+                            href="#achievements"
+                            className="group flex items-center justify-center gap-2 bg-primary/10 border border-primary/20 text-primary-foreground px-6 py-4 rounded-xl font-medium hover:bg-primary/20 transition-all shadow-lg shadow-primary/5 w-full"
+                        >
+                            Achievements <Trophy className="w-4 h-4 group-hover:text-purple-400" />
+                        </a>
+                      </MagneticButton>
+
+                      <MagneticButton>
+                        <a
+                            href="#projects"
+                            className="group flex items-center justify-center gap-2 bg-primary text-white px-6 py-4 rounded-xl font-medium hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 w-full"
+                        >
+                            Projects <Code2 className="w-4 h-4" />
+                        </a>
+                      </MagneticButton>
+
+                      <MagneticButton>
+                        <a
+                            href="#socials"
+                            className="group flex items-center justify-center gap-2 bg-secondary/50 border border-white/5 hover:border-purple-500/30 text-secondary-foreground px-6 py-4 rounded-xl font-medium hover:bg-secondary/80 transition-all shadow-sm w-full"
+                        >
+                            Connect <ExternalLink className="w-4 h-4 group-hover:text-purple-400" />
+                        </a>
+                      </MagneticButton>
                   </div>
               </motion.div>
 
@@ -93,27 +107,30 @@ export default function HeroSection({ quote }: HeroSectionProps) {
                   transition={{ duration: 0.3, delay: 0.1 }}
                   className="relative group w-64 h-64 md:w-96 md:h-96 shrink-0"
               >
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-3xl rotate-6 group-hover:rotate-3 transition-transform opacity-20 blur-2xl"></div>
-                  <div className="relative w-full h-full rounded-3xl overflow-hidden border-4 border-white/10 shadow-2xl bg-zinc-900">
-                    {/* Using a Gojo Satoru style placeholder image */}
-                    <img
-                        src="/gojo-v1.png"
-                        alt="Profile"
-                        className="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-500"
-                    />
-                  </div>
-                  {/* Floating Ghibli-esque / Anime style badge */}
-                  <motion.div 
-                    animate={{ y: [0, -10, 0] }}
-                    transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                    className="absolute -bottom-6 -right-6 bg-black/80 backdrop-blur-md border border-white/10 p-4 rounded-2xl flex items-center gap-3 shadow-xl"
-                  >
-                     <span className="text-2xl">🤞</span>
-                     <div className="flex flex-col">
-                       <span className="text-xs font-bold text-white uppercase tracking-wider">Sorcerer Grade</span>
-                       <span className="text-xs text-purple-400">Special</span>
-                     </div>
-                  </motion.div>
+                  <TiltCard className="w-full h-full">
+                      <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-3xl rotate-6 group-hover:rotate-3 transition-transform opacity-20 blur-2xl"></div>
+                      <div className="relative w-full h-full rounded-3xl overflow-hidden border-4 border-white/10 shadow-2xl bg-zinc-900">
+                        {/* Using a Gojo Satoru style placeholder image */}
+                        <img
+                            src="/gojo-v1.png"
+                            alt="Profile"
+                            className="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-500"
+                        />
+                      </div>
+                      
+                      {/* Floating Ghibli-esque / Anime style badge */}
+                      <motion.div 
+                        animate={{ y: [0, -10, 0] }}
+                        transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+                        className="absolute -bottom-6 -right-6 bg-black/80 backdrop-blur-md border border-white/10 p-4 rounded-2xl flex items-center gap-3 shadow-xl"
+                      >
+                         <span className="text-2xl">🤞</span>
+                         <div className="flex flex-col">
+                           <span className="text-xs font-bold text-white uppercase tracking-wider">Sorcerer Grade</span>
+                           <span className="text-xs text-purple-400">Special</span>
+                         </div>
+                      </motion.div>
+                  </TiltCard>
               </motion.div>
           </div>
 
@@ -125,17 +142,19 @@ export default function HeroSection({ quote }: HeroSectionProps) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: false }}
                   transition={{ duration: 0.3, delay: 0.2 }}
-                  className="flex-1 bg-secondary/10 border border-white/5 hover:border-purple-500/20 rounded-3xl p-8 flex flex-col justify-center text-center md:text-left relative overflow-hidden group transition-colors"
+                  className="flex-1" // Removed styling from here, moving to TiltCard or inner
               >
-                  <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity">
-                      <Code2 className="w-16 h-16" />
-                  </div>
-                  <blockquote className="text-xl md:text-2xl font-serif italic text-muted-foreground/90 relative z-10 leading-relaxed">
-                      &quot;{quote}&quot;
-                  </blockquote>
-                  <p className="text-xs text-purple-400 mt-4 uppercase tracking-widest opacity-70 relative z-10 font-bold">
-                      — Quote of the Day —
-                  </p>
+                  <TiltCard className="h-full bg-secondary/10 border border-white/5 hover:border-purple-500/20 rounded-3xl p-8 flex flex-col justify-center text-center md:text-left relative overflow-hidden group transition-colors">
+                      <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity">
+                          <Code2 className="w-16 h-16" />
+                      </div>
+                      <blockquote className="text-xl md:text-2xl font-serif italic text-muted-foreground/90 relative z-10 leading-relaxed">
+                          &quot;{quote}&quot;
+                      </blockquote>
+                      <p className="text-xs text-purple-400 mt-4 uppercase tracking-widest opacity-70 relative z-10 font-bold">
+                          — Quote of the Day —
+                      </p>
+                  </TiltCard>
               </motion.div>
 
               {/* Enhanced Clock Widget */}
