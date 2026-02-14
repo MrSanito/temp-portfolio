@@ -24,8 +24,8 @@ const stagger = {
 export default function HeroSection({ quote }: HeroSectionProps) {
   return (
     <section id="home" className="min-h-[90vh] flex flex-col justify-center pt-32 pb-12 relative px-6 max-w-7xl mx-auto">
-      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" />
-      <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px] mix-blend-screen" />
+      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px]  rounded-full blur-[120px] mix-blend-screen animate-pulse" />
+      <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px]  rounded-full blur-[120px] mix-blend-screen" />
 
       <div className="max-w-6xl mx-auto w-full z-10">
         <motion.div 
@@ -48,7 +48,7 @@ export default function HeroSection({ quote }: HeroSectionProps) {
                     </div>
                     <h1 className="text-5xl md:text-7xl font-bold tracking-tighter flex flex-col gap-2">
                         <span className="block">
-                            I am <ScrambleText text="Vishal" className="text-primary bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-indigo-500" />
+                            I am <ScrambleText text="Vishal" className="text-purple-400/80 " />
                         </span>
                     </h1>
                     <div className="flex flex-col gap-1 items-center md:items-start text-muted-foreground">
@@ -108,7 +108,7 @@ export default function HeroSection({ quote }: HeroSectionProps) {
                   className="relative group w-64 h-64 md:w-96 md:h-96 shrink-0"
               >
                   <TiltCard className="w-full h-full">
-                      <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-3xl rotate-6 group-hover:rotate-3 transition-transform opacity-20 blur-2xl"></div>
+                      <div className="absolute inset-0  rounded-3xl rotate-6 group-hover:rotate-3 transition-transform opacity-20 blur-2xl"></div>
                       <div className="relative w-full h-full rounded-3xl overflow-hidden border-4 border-white/10 shadow-2xl bg-zinc-900">
                         {/* Using a Gojo Satoru style placeholder image */}
                         <img
