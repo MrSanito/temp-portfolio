@@ -10,12 +10,13 @@ export default function Navbar() {
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3 }}
           className="font-bold text-2xl flex items-center gap-2 tracking-tighter"
         >
           <div className="w-8 h-8 rounded bg-primary flex items-center justify-center text-white">
              <Terminal className="w-5 h-5" />
           </div>
-          <span>MrSanito</span>
+          <span>Zynito</span>
         </motion.div>
         <div className="flex gap-8 text-sm font-medium text-muted-foreground">
            <a href="#projects" className="hover:text-foreground transition-colors">Work</a>

@@ -23,7 +23,7 @@ const stagger = {
 
 export default function HeroSection({ quote }: HeroSectionProps) {
   return (
-    <section id="home" className="min-h-[90vh] flex flex-col justify-center pt-32 pb-12 relative px-6 max-w-7xl mx-auto">
+    <section id="home" className="min-h-[90vh] flex flex-col justify-center pt-32 pb-12 relative px-6 max-w-7xl mx-auto overflow-hidden">
       <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px]  rounded-full blur-[120px] mix-blend-screen animate-pulse" />
       <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px]  rounded-full blur-[120px] mix-blend-screen" />
 
