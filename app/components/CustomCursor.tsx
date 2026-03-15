@@ -79,25 +79,29 @@ export default function CustomCursor() {
   useEffect(() => {
     setMounted(true);
     
-    // Initial Position Center Screen
-    posRef.current.nekoX = window.innerWidth / 2;
-    posRef.current.nekoY = window.innerHeight / 2;
-    posRef.current.mouseX = window.innerWidth / 2;
-    posRef.current.mouseY = window.innerHeight / 2;
-    posRef.current.followerX = window.innerWidth / 2;
-    posRef.current.followerY = window.innerHeight / 2;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      posRef.current.mouseX = e.clientX;
-      posRef.current.mouseY = e.clientY;
+    const updateMousePos = (x: number, y: number) => {
+      posRef.current.mouseX = x;
+      posRef.current.mouseY = y;
       
       // Update Main Cursor Dot Immediately
       if (cursorRef.current) {
-        cursorRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+        cursorRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      }
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      updateMousePos(e.clientX, e.clientY);
+    };
+
+    const handleTouch = (e: TouchEvent) => {
+      if (e.touches && e.touches[0]) {
+        updateMousePos(e.touches[0].clientX, e.touches[0].clientY);
       }
     };
 
     window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("touchstart", handleTouch, { passive: true });
+    window.addEventListener("touchmove", handleTouch, { passive: true });
 
     // Helper to set sprite
     const setSprite = (name: string, frame: number) => {
@@ -232,41 +236,49 @@ export default function CustomCursor() {
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("touchstart", handleTouch);
+      window.removeEventListener("touchmove", handleTouch);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, []);
 
-  // Don't render on server or touch devices
-  if (!mounted || (typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches)) {
-     return null;
-  }
+  // Render logic: 
+  // - Show Pet everywhere if mounted
+  // - Hide Dot/Follower on touch devices
+  if (!mounted) return null;
+
+  const isTouchDevice = typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches;
 
   return createPortal(
     <>
-      {/* 1. Main Cursor Dot (White) */}
-      <div 
-        ref={cursorRef}
-        className="pointer-events-none fixed top-0 left-0 bg-white rounded-full mix-blend-difference z-[100000]"
-        style={{
-            width: "8px",
-            height: "8px",
-            marginTop: "-4px",
-            marginLeft: "-4px",
-        }}
-      />
-      
-      {/* 2. Cursor Follower (Ring) */}
-      <div
-        ref={cursorFollowerRef}
-        className="pointer-events-none fixed top-0 left-0 border border-white/50 rounded-full z-[99999]"
-        style={{
-            width: "24px",
-            height: "24px",
-            marginTop: "-12px",
-            marginLeft: "-12px",
-            transition: "transform 0.1s linear", // Smooth catchup done via JS lerp, but css transition adds silkiness
-        }}
-      />
+      {!isTouchDevice && (
+        <>
+          {/* 1. Main Cursor Dot (White) */}
+          <div 
+            ref={cursorRef}
+            className="pointer-events-none fixed top-0 left-0 bg-white rounded-full mix-blend-difference z-[100000]"
+            style={{
+                width: "8px",
+                height: "8px",
+                marginTop: "-4px",
+                marginLeft: "-4px",
+            }}
+          />
+          
+          {/* 2. Cursor Follower (Ring) */}
+          <div
+            ref={cursorFollowerRef}
+            className="pointer-events-none fixed top-0 left-0 border border-white/50 rounded-full z-[99999]"
+            style={{
+                width: "24px",
+                height: "24px",
+                marginTop: "-12px",
+                marginLeft: "-12px",
+                transition: "transform 0.1s linear",
+            }}
+          />
+        </>
+      )}
 
       {/* 3. Oneko Pet */}
       <div

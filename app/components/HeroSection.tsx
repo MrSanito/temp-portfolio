@@ -23,7 +23,7 @@ const stagger = {
 
 export default function HeroSection({ quote }: HeroSectionProps) {
   return (
-    <section id="home" className="min-h-[90vh] flex flex-col justify-center pt-32 pb-12 relative px-6 max-w-7xl mx-auto overflow-hidden">
+    <section id="home" className="min-h-[90vh] flex flex-col justify-center pt-24 md:pt-32 pb-12 relative px-4 sm:px-6 max-w-7xl mx-auto overflow-hidden">
       <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px]  rounded-full blur-[120px] mix-blend-screen animate-pulse" />
       <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px]  rounded-full blur-[120px] mix-blend-screen" />
 
@@ -46,44 +46,44 @@ export default function HeroSection({ quote }: HeroSectionProps) {
                     <div className="flex items-center justify-center md:justify-start gap-2 h-12">
                         <GreetingFlipper />
                     </div>
-                    <h1 className="text-5xl md:text-7xl font-bold tracking-tighter flex flex-col gap-2">
+                    <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tighter flex flex-col gap-2">
                         <span className="block">
                             I am <ScrambleText text="Vishal" className="text-purple-400/80 " />
                         </span>
                     </h1>
                     <div className="flex flex-col gap-1 items-center md:items-start text-muted-foreground">
-                      <p className="text-xl md:text-2xl leading-relaxed">
+                      <p className="text-lg md:text-2xl leading-relaxed max-w-[18ch] sm:max-w-none mx-auto md:mx-0">
                           Backend Engineer and AI/ML Engineer (learning)
                       </p>
-                      <p className="text-sm font-code text-purple-400/80 tracking-wide">
+                      <p className="text-xs font-code text-purple-400/80 tracking-wide mt-1">
                          aka sanito / zynito
                       </p>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4 w-full max-w-md mx-auto md:mx-0">
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4 w-full max-w-md mx-auto md:mx-0">
                       <MagneticButton>
                         <a
                             href="#about"
-                            className="group flex items-center justify-center gap-2 bg-secondary/50 border border-white/5 hover:border-purple-500/30 text-secondary-foreground px-6 py-4 rounded-xl font-medium hover:bg-secondary/80 transition-all shadow-sm w-full"
+                            className="group flex items-center justify-center gap-2 bg-secondary/50 border border-white/5 hover:border-purple-500/30 text-secondary-foreground px-4 sm:px-6 py-3.5 sm:py-4 rounded-xl font-medium hover:bg-secondary/80 transition-all shadow-sm w-full text-sm sm:text-base"
                         >
-                            About Me <User className="w-4 h-4 group-hover:text-purple-400" />
+                            About <User className="w-4 h-4 group-hover:text-purple-400" />
                         </a>
                       </MagneticButton>
                       
                       <MagneticButton>
                         <a
                             href="#achievements"
-                            className="group flex items-center justify-center gap-2 bg-primary/10 border border-primary/20 text-primary-foreground px-6 py-4 rounded-xl font-medium hover:bg-primary/20 transition-all shadow-lg shadow-primary/5 w-full"
+                            className="group flex items-center justify-center gap-2 bg-primary/10 border border-primary/20 text-primary-foreground px-4 sm:px-6 py-3.5 sm:py-4 rounded-xl font-medium hover:bg-primary/20 transition-all shadow-lg shadow-primary/5 w-full text-sm sm:text-base"
                         >
-                            Achievements <Trophy className="w-4 h-4 group-hover:text-purple-400" />
+                            Awards <Trophy className="w-4 h-4 group-hover:text-purple-400" />
                         </a>
                       </MagneticButton>
 
                       <MagneticButton>
                         <a
                             href="#projects"
-                            className="group flex items-center justify-center gap-2 bg-primary text-white px-6 py-4 rounded-xl font-medium hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 w-full"
+                            className="group flex items-center justify-center gap-2 bg-primary text-white px-4 sm:px-6 py-3.5 sm:py-4 rounded-xl font-medium hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 w-full text-sm sm:text-base"
                         >
                             Projects <Code2 className="w-4 h-4" />
                         </a>
@@ -92,7 +92,7 @@ export default function HeroSection({ quote }: HeroSectionProps) {
                       <MagneticButton>
                         <a
                             href="#socials"
-                            className="group flex items-center justify-center gap-2 bg-secondary/50 border border-white/5 hover:border-purple-500/30 text-secondary-foreground px-6 py-4 rounded-xl font-medium hover:bg-secondary/80 transition-all shadow-sm w-full"
+                            className="group flex items-center justify-center gap-2 bg-secondary/50 border border-white/5 hover:border-purple-500/30 text-secondary-foreground px-4 sm:px-6 py-3.5 sm:py-4 rounded-xl font-medium hover:bg-secondary/80 transition-all shadow-sm w-full text-sm sm:text-base"
                         >
                             Connect <ExternalLink className="w-4 h-4 group-hover:text-purple-400" />
                         </a>
@@ -105,7 +105,7 @@ export default function HeroSection({ quote }: HeroSectionProps) {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: false }}
                   transition={{ duration: 0.3, delay: 0.1 }}
-                  className="relative group w-64 h-64 md:w-96 md:h-96 shrink-0"
+                  className="relative group w-48 h-48 sm:w-64 sm:h-64 md:w-96 md:h-96 shrink-0"
               >
                   <TiltCard className="w-full h-full">
                       <div className="absolute inset-0  rounded-3xl rotate-6 group-hover:rotate-3 transition-transform opacity-20 blur-2xl"></div>
@@ -148,7 +148,7 @@ export default function HeroSection({ quote }: HeroSectionProps) {
                       <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity">
                           <Code2 className="w-16 h-16" />
                       </div>
-                      <blockquote className="text-xl md:text-2xl font-serif italic text-muted-foreground/90 relative z-10 leading-relaxed">
+                      <blockquote className="text-lg sm:text-xl md:text-2xl font-serif italic text-muted-foreground/90 relative z-10 leading-relaxed">
                           &quot;{quote}&quot;
                       </blockquote>
                       <p className="text-xs text-purple-400 mt-4 uppercase tracking-widest opacity-70 relative z-10 font-bold">

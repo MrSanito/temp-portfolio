@@ -20,7 +20,7 @@ export default function AboutSection() {
                 className="space-y-16"
             >
                 <div className="flex flex-col gap-4">
-                  <h2 className="text-4xl md:text-6xl font-bold tracking-tighter flex items-center gap-3">
+                  <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tighter flex items-center gap-3">
                       About <span className="text-purple-500">Me</span>
                   </h2>
                 </div>
@@ -28,7 +28,7 @@ export default function AboutSection() {
                 <div className="flex flex-col lg:flex-row gap-16">
                     {/* Left Column: Bio & Terminal */}
                     <div className="lg:w-3/5 space-y-10">
-                        <div className="prose prose-lg prose-invert text-muted-foreground leading-relaxed">
+                        <div className="prose sm:prose-lg prose-invert text-muted-foreground leading-relaxed">
                             <p>{bio}</p>
                         </div>
 
@@ -79,16 +79,16 @@ export default function AboutSection() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: false }}
                             transition={{ delay: 0.2, duration: 0.3 }}
-                            className="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl p-8 shadow-xl hover:shadow-2xl transition-all"
+                            className="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl p-6 sm:p-8 shadow-xl hover:shadow-2xl transition-all"
                         >
                             <div className="flex flex-col md:flex-row gap-8 items-start md:items-center justify-between">
                                 <div className="space-y-4 flex-1">
                                     <div className="flex items-center gap-3">
-                                        <span className="relative flex h-3 w-3">
+                                        <span className="relative flex h-2.5 w-2.5">
                                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                            <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
                                         </span>
-                                        <h3 className="font-bold text-xl flex items-center gap-2">
+                                        <h3 className="font-bold text-lg sm:text-xl flex items-center gap-2">
                                             Open for Roles:
                                         </h3>
                                     </div>
@@ -138,7 +138,7 @@ export default function AboutSection() {
                                         transition={{ delay: idx * 0.05, duration: 0.3 }}
                                         className="h-full"
                                     >
-                                        <SpotlightCard className="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl p-5 hover:border-purple-500/30 transition-all shadow-sm group h-full">
+                                        <SpotlightCard className="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl p-4 sm:p-5 hover:border-purple-500/30 transition-all shadow-sm group h-full">
                                             <h4 className="text-xs font-bold text-purple-400 mb-4 uppercase tracking-wider">{stack.category}</h4>
                                             <div className="flex flex-wrap gap-4">
                                                 {stack.items.map((item) => (

@@ -26,27 +26,46 @@ interface Repo {
 }
 
 function ContributionGrid({ data }: { data: any[] }) {
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  // Show only last 16 weeks (approx 4 months) on mobile
+  const displayData = isMobile ? data.slice(-16 * 7) : data;
+  const daysInView = displayData.length;
+  const numWeeks = Math.ceil(daysInView / 7);
+
   // Group contributions by month for labels
   const months: { label: string; weekIdx: number }[] = [];
-  let lastMonth = -1;
-  const daysInYear = data.length;
-  const numWeeks = Math.ceil(daysInYear / 7);
+  let lastMonthLabel = "";
 
-  data.forEach((day, i) => {
+  displayData.forEach((day, i) => {
     const date = new Date(day.date);
-    const month = date.getMonth();
-    if (month !== lastMonth) {
-      months.push({ 
-        label: date.toLocaleString("default", { month: "short" }), 
-        weekIdx: Math.floor(i / 7) 
-      });
-      lastMonth = month;
+    const monthLabel = date.toLocaleString("default", { month: "short" });
+    const weekIdx = Math.floor(i / 7);
+    
+    // Only add a label if it's a new month AND it's at least 2 weeks away from the last label
+    // This prevents labels from "kissing" on mobile/sliced views
+    if (monthLabel !== lastMonthLabel) {
+      const lastLabel = months[months.length - 1];
+      if (!lastLabel || (weekIdx - lastLabel.weekIdx) > 2) {
+        months.push({ 
+          label: monthLabel, 
+          weekIdx: weekIdx
+        });
+        lastMonthLabel = monthLabel;
+      }
     }
   });
 
   return (
-    <div className="w-full flex flex-col items-center">
-      <div className="relative inline-block w-full max-w-fit">
+    <div className="w-full flex flex-col items-center overflow-hidden">
+      <div className="relative inline-block w-full max-w-fit overflow-visible">
         {/* Month labels */}
         <div className="flex mb-2 relative h-3 w-full text-[9px] uppercase tracking-tighter text-muted-foreground/40 font-bold" style={{ marginLeft: "28px" }}>
           {months.map((m, i) => (
@@ -78,7 +97,7 @@ function ContributionGrid({ data }: { data: any[] }) {
                 gridAutoColumns: "11px"
             }}
           >
-            {data.map((day, i) => (
+            {displayData.map((day, i) => (
               <div
                 key={i}
                 className={`w-[11px] h-[11px] rounded-[2px] ${LEVELS[day.level]} transition-all duration-300 hover:scale-150 hover:z-50 hover:ring-1 hover:ring-purple-400 cursor-pointer relative group/day shrink-0`}
@@ -209,19 +228,19 @@ export default function GithubZone() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
         <StatsBox label="Repos" value={stats.repos} icon={<Book className="w-4 h-4 text-purple-400" />} />
         <StatsBox label="Stars" value={stats.stars} icon={<Star className="w-4 h-4 text-yellow-400" />} />
-        <StatsBox label="Followers" value={stats.followers} icon={<Users className="w-4 h-4 text-blue-400" />} />
+        <StatsBox label="Followers" value={stats.followers} icon={<Users className="w-4 h-4 text-blue-400" />} className="col-span-2 md:col-span-1" />
       </div>
 
       {/* Custom Contribution Map */}
       <div className="flex flex-col gap-3 flex-1 justify-end">
-         <div className="flex justify-between items-center px-1">
+         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center px-1 gap-1">
             <span className="text-[10px] uppercase tracking-[0.2em] font-black text-white/20">Commit Pulse</span>
-            <span className="text-[10px] font-bold text-muted-foreground/30">{totalContributions} contributions • 2024 - Present</span>
+            <span className="text-[9px] sm:text-[10px] font-bold text-muted-foreground/30">{totalContributions} contributions • 2024 - Present</span>
          </div>
-         <div className="w-full p-6 sm:p-8 rounded-3xl bg-black/20 border border-white/3 overflow-x-auto no-scrollbar">
+         <div className="w-full p-4 sm:p-8 rounded-2xl sm:rounded-3xl bg-black/20 border border-white/3 overflow-x-auto no-scrollbar">
             {contributions.length > 0 ? (
                 <ContributionGrid data={contributions} />
             ) : (
@@ -235,9 +254,9 @@ export default function GithubZone() {
   );
 }
 
-function StatsBox({ label, value, icon }: { label: string, value: number, icon: React.ReactNode }) {
+function StatsBox({ label, value, icon, className }: { label: string, value: number, icon: React.ReactNode, className?: string }) {
   return (
-    <div className="flex flex-col items-center justify-center p-5 rounded-2xl bg-white/3 border border-white/5 hover:bg-white/5 hover:border-white/10 hover:translate-y-[-4px] transition-all duration-500 group relative overflow-hidden">
+    <div className={`flex flex-col items-center justify-center p-3 sm:p-5 rounded-2xl bg-white/3 border border-white/5 hover:border-white/10 hover:translate-y-[-4px] transition-all duration-500 group relative overflow-hidden ${className}`}>
        <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
        <div className="mb-3 opacity-60 group-hover:opacity-100 transition-all transform group-hover:scale-125 duration-500">{icon}</div>
        <span className="text-2xl font-black text-white tracking-tighter tabular-nums">{value}</span>
