@@ -16,7 +16,7 @@ export const projectsData: Project[] = [
         description: "AI-powered workflow automation platform. Streamlining business processes with intelligent, scalable automation engines.",
         tech_stack: ["Next.js", "TypeScript", "AI", "PostgreSQL"],
         demo_link: "https://solobuild.vercel.app/",
-        image_url: "/project-solobuild.png",
+        image_url: "/solobuild.png",
         status: "deployed"
     },
     {
@@ -25,7 +25,7 @@ export const projectsData: Project[] = [
         description: "India's Leading Waterproofing Experts. Delivering engineering-grade protection for industrial and residential structures.",
         tech_stack: ["Next.js", "Tailwind CSS", "Framer Motion"],
         demo_link: "https://flipconceptindia.com/",
-        image_url: "/project-flipconcept.png",
+        image_url: "/flipconceptindia.png",
         status: "deployed"
     },
     {
