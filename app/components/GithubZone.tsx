@@ -26,91 +26,69 @@ interface Repo {
 }
 
 function ContributionGrid({ data }: { data: any[] }) {
-  // Group contributions into weeks (columns)
-  const weeks: any[][] = [];
-  let currentWeek: any[] = [];
-
-  // Pad the first week so it starts on Sunday
-  const firstDay = new Date(data[0].date).getDay();
-  for (let i = 0; i < firstDay; i++) {
-    currentWeek.push(null);
-  }
-
-  data.forEach((day) => {
-    currentWeek.push(day);
-    if (currentWeek.length === 7) {
-      weeks.push(currentWeek);
-      currentWeek = [];
-    }
-  });
-  if (currentWeek.length > 0) {
-    weeks.push(currentWeek);
-  }
-
+  // Group contributions by month for labels
   const months: { label: string; weekIdx: number }[] = [];
   let lastMonth = -1;
-  weeks.forEach((week, weekIdx) => {
-    const firstRealDay = week.find((d) => d !== null);
-    if (firstRealDay) {
-      const month = new Date(firstRealDay.date).getMonth();
-      if (month !== lastMonth) {
-        months.push({ label: new Date(firstRealDay.date).toLocaleString("default", { month: "short" }), weekIdx });
-        lastMonth = month;
-      }
+  const daysInYear = data.length;
+  const numWeeks = Math.ceil(daysInYear / 7);
+
+  data.forEach((day, i) => {
+    const date = new Date(day.date);
+    const month = date.getMonth();
+    if (month !== lastMonth) {
+      months.push({ 
+        label: date.toLocaleString("default", { month: "short" }), 
+        weekIdx: Math.floor(i / 7) 
+      });
+      lastMonth = month;
     }
   });
 
   return (
-    <div className="w-full overflow-x-auto no-scrollbar py-2">
-      <div className="min-w-fit mx-auto flex flex-col items-start px-4">
+    <div className="w-full flex flex-col items-center">
+      <div className="relative inline-block w-full max-w-fit">
         {/* Month labels */}
-        <div className="flex mb-3 relative h-4 w-full" style={{ marginLeft: "32px" }}>
-            {months.map((m, i) => {
-                return (
-                    <span
-                        key={i}
-                        className="text-[10px] uppercase tracking-wider text-muted-foreground/60 absolute whitespace-nowrap"
-                        style={{ left: `${m.weekIdx * 14}px` }}
-                    >
-                        {m.label}
-                    </span>
-                );
-            })}
+        <div className="flex mb-2 relative h-3 w-full text-[9px] uppercase tracking-tighter text-muted-foreground/40 font-bold" style={{ marginLeft: "28px" }}>
+          {months.map((m, i) => (
+            <span
+              key={i}
+              className="absolute whitespace-nowrap"
+              style={{ left: `${m.weekIdx * 14}px` }}
+            >
+              {m.label}
+            </span>
+          ))}
         </div>
 
-        <div className="flex gap-2 w-full justify-start items-start">
-            {/* Day labels */}
-            <div className="flex flex-col gap-[3px] w-6 justify-between py-0.5">
-                {["", "Mon", "", "Wed", "", "Fri", ""].map((d, i) => (
-                    <span key={i} className="text-[9px] text-muted-foreground/50 h-[11px] leading-[11px] font-medium">
-                        {d}
-                    </span>
-                ))}
-            </div>
+        <div className="flex gap-2 items-start justify-center">
+          {/* Day labels */}
+          <div className="grid grid-rows-7 gap-[3px] py-px">
+            {["", "Mon", "", "Wed", "", "Fri", ""].map((d, i) => (
+              <span key={i} className="text-[8px] text-muted-foreground/40 font-bold h-[11px] flex items-center justify-end pr-1 -translate-y-px">
+                {d}
+              </span>
+            ))}
+          </div>
 
-            {/* Grid */}
-            <div className="flex gap-[3px]">
-                {weeks.map((week, wi) => (
-                    <div key={wi} className="flex flex-col gap-[3px]">
-                        {Array.from({ length: 7 }).map((_, di) => {
-                            const day = week[di] || null;
-                            if (!day) {
-                                return <div key={di} className="w-[11px] h-[11px]" />;
-                            }
-                            return (
-                                <div
-                                    key={di}
-                                    className={`w-[11px] h-[11px] rounded-[2px] ${LEVELS[day.level]} transition-all duration-300 hover:scale-150 hover:z-10 hover:ring-1 hover:ring-purple-400 cursor-pointer relative group/day`}
-                                >
-                                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-zinc-900 border border-white/10 rounded text-[9px] text-white opacity-0 group-hover/day:opacity-100 pointer-events-none whitespace-nowrap z-50 transition-opacity shadow-xl">
-                                        <span className="font-bold text-purple-400">{day.count}</span> contributions on {day.date}
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
-                ))}
-            </div>
+          {/* Grid */}
+          <div 
+            className="grid grid-flow-col grid-rows-7 gap-[3px]"
+            style={{ 
+                gridTemplateColumns: `repeat(${numWeeks}, 11px)`,
+                gridAutoColumns: "11px"
+            }}
+          >
+            {data.map((day, i) => (
+              <div
+                key={i}
+                className={`w-[11px] h-[11px] rounded-[2px] ${LEVELS[day.level]} transition-all duration-300 hover:scale-150 hover:z-50 hover:ring-1 hover:ring-purple-400 cursor-pointer relative group/day shrink-0`}
+              >
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-zinc-900 border border-white/10 rounded text-[9px] text-white opacity-0 group-hover/day:opacity-100 pointer-events-none whitespace-nowrap z-100 transition-opacity shadow-2xl backdrop-blur-md">
+                  <span className="font-bold text-purple-400">{day.count}</span> contributions on {day.date}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -127,91 +105,128 @@ export default function GithubZone() {
   const [totalContributions, setTotalContributions] = useState(0);
   const [topRepos, setTopRepos] = useState<Repo[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchData() {
       try {
+        setError(null);
         const userRes = await fetch("https://api.github.com/users/MrSanito");
+        if (!userRes.ok) throw new Error("GitHub User API failed");
         const userData = await userRes.json();
         
         const reposRes = await fetch("https://api.github.com/users/MrSanito/repos?sort=updated&per_page=100");
-        const reposData: Repo[] = await reposRes.json();
+        if (!reposRes.ok) throw new Error("GitHub Repos API failed");
+        const reposData = await reposRes.json();
         
-        const totalStars = reposData.reduce((acc: number, repo: any) => acc + repo.stargazers_count, 0);
-        
-        // Pick top 2 starred repos
-        const sortedRepos = reposData.sort((a: any, b: any) => b.stargazers_count - a.stargazers_count).slice(0, 2);
+        if (!Array.isArray(reposData)) throw new Error("Invalid repos data");
 
-        // Fetch Contributions
+        const totalStars = reposData.reduce((acc: number, repo: any) => acc + (repo.stargazers_count || 0), 0);
+        const sortedRepos = [...reposData].sort((a: any, b: any) => (b.stargazers_count || 0) - (a.stargazers_count || 0)).slice(0, 2);
+
         const contribRes = await fetch("https://github-contributions-api.jogruber.de/v4/MrSanito?y=last");
+        if (!contribRes.ok) throw new Error("GitHub Contributions API failed");
         const contribData = await contribRes.json();
 
         setStats({
-          repos: userData.public_repos,
-          followers: userData.followers,
+          repos: userData.public_repos || 0,
+          followers: userData.followers || 0,
           stars: totalStars,
         });
         setTopRepos(sortedRepos);
-        setContributions(contribData.contributions);
+        setContributions(contribData.contributions || []);
         setTotalContributions(contribData.total?.lastYear || 0);
         setLoading(false);
       } catch (error) {
         console.error("Failed to fetch Github data", error);
+        setError("API BUSY");
         setLoading(false);
       }
     }
     fetchData();
   }, []);
 
-  if (loading) return <div className="h-full w-full bg-zinc-900/50 rounded-3xl animate-pulse" />;
+  if (loading) return (
+    <div className="h-full w-full flex flex-col gap-6 animate-pulse opacity-50">
+      <div className="h-12 bg-white/5 rounded-2xl" />
+      <div className="grid grid-cols-3 gap-3 h-20">
+        <div className="bg-white/5 rounded-2xl" />
+        <div className="bg-white/5 rounded-2xl" />
+        <div className="bg-white/5 rounded-2xl" />
+      </div>
+      <div className="flex-1 bg-white/5 rounded-2xl" />
+    </div>
+  );
+
+  if (error) {
+    return (
+      <div className="h-full flex flex-col items-center justify-center p-6 text-center space-y-4 border border-red-500/10 rounded-2xl bg-red-500/2">
+        <div className="p-3 bg-red-500/10 rounded-2xl border border-red-500/20">
+          <Github className="w-8 h-8 text-red-400 opacity-50" />
+        </div>
+        <div className="space-y-1">
+          <h3 className="font-bold text-white tracking-tight">GitHub Statistics Paused</h3>
+          <p className="text-xs text-muted-foreground max-w-[200px] leading-relaxed opacity-70">
+            API rate limits reached. Data will resume shortly.
+          </p>
+        </div>
+        <button 
+          onClick={() => window.location.reload()}
+          className="text-[10px] uppercase tracking-widest font-bold text-red-400/80 hover:text-red-300 transition-colors bg-red-500/5 px-4 py-1.5 rounded-full border border-red-500/10"
+        >
+          Try Refresh
+        </button>
+      </div>
+    );
+  }
 
   return (
     <motion.div 
       initial="hidden"
       animate="visible"
       variants={fadeUp}
-      className="h-full flex flex-col gap-6"
+      className="h-full flex flex-col gap-8 py-2"
     >
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-white/5 rounded-xl border border-white/10">
+          <div className="p-2.5 bg-white/5 rounded-xl border border-white/10 shadow-sm group-hover:border-purple-500/20 transition-colors">
             <Github className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h3 className="text-xl font-bold text-white tracking-tight">GitHub Activity</h3>
-            <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-widest mt-0.5 opacity-60">@MrSanito • Contributions</p>
+            <h3 className="text-xl font-bold text-white tracking-tight leading-none">GitHub Activity</h3>
+            <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1.5 opacity-40">@MrSanito • Visualizing Progress</p>
           </div>
         </div>
         <a 
           href="https://github.com/MrSanito"
           target="_blank" 
           rel="noreferrer"
-          className="p-2 rounded-full hover:bg-white/5 transition-colors group"
+          className="p-2.5 rounded-full hover:bg-white/5 transition-all group/link border border-transparent hover:border-white/5"
         >
-          <ArrowUpRight className="w-5 h-5 text-muted-foreground group-hover:text-white transition-colors" />
+          <ArrowUpRight className="w-5 h-5 text-muted-foreground group-hover/link:text-white group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-all" />
         </a>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-3 gap-3">
-        <StatsBox label="Repos" value={stats.repos} icon={<Book className="w-3.5 h-3.5 text-purple-400" />} />
-        <StatsBox label="Stars" value={stats.stars} icon={<Star className="w-3.5 h-3.5 text-yellow-400" />} />
-        <StatsBox label="Followers" value={stats.followers} icon={<Users className="w-3.5 h-3.5 text-blue-400" />} />
+      <div className="grid grid-cols-3 gap-4">
+        <StatsBox label="Repos" value={stats.repos} icon={<Book className="w-4 h-4 text-purple-400" />} />
+        <StatsBox label="Stars" value={stats.stars} icon={<Star className="w-4 h-4 text-yellow-400" />} />
+        <StatsBox label="Followers" value={stats.followers} icon={<Users className="w-4 h-4 text-blue-400" />} />
       </div>
 
       {/* Custom Contribution Map */}
-      <div className="flex flex-col gap-2">
-         <div className="flex justify-between items-end">
-            <span className="text-[10px] uppercase tracking-wider font-semibold text-muted-foreground/70">Contribution Map</span>
-            <span className="text-[10px] text-muted-foreground/50">{totalContributions} contributions this year</span>
+      <div className="flex flex-col gap-3 flex-1 justify-end">
+         <div className="flex justify-between items-center px-1">
+            <span className="text-[10px] uppercase tracking-[0.2em] font-black text-white/20">Commit Pulse</span>
+            <span className="text-[10px] font-bold text-muted-foreground/30">{totalContributions} contributions • 2024 - Present</span>
          </div>
-         <div className="w-full p-4 rounded-2xl bg-black/40 border border-white/5">
+         <div className="w-full p-6 sm:p-8 rounded-3xl bg-black/20 border border-white/3 overflow-x-auto no-scrollbar">
             {contributions.length > 0 ? (
                 <ContributionGrid data={contributions} />
             ) : (
-                <div className="h-24 flex items-center justify-center text-xs text-muted-foreground">
-                    No data available
+                <div className="h-32 flex items-center justify-center text-[10px] uppercase font-bold tracking-widest text-muted-foreground/20 italic">
+                    Grid visualization unavailable
                 </div>
             )}
          </div>
@@ -222,10 +237,11 @@ export default function GithubZone() {
 
 function StatsBox({ label, value, icon }: { label: string, value: number, icon: React.ReactNode }) {
   return (
-    <div className="flex flex-col items-center justify-center p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 hover:translate-y-[-2px] transition-all duration-300 group">
-       <div className="mb-2 opacity-70 group-hover:opacity-100 transition-opacity transform group-hover:scale-110 duration-300">{icon}</div>
-       <span className="text-xl font-bold text-white tracking-tighter">{value}</span>
-       <span className="text-[9px] text-muted-foreground/60 uppercase tracking-widest font-semibold mt-0.5">{label}</span>
+    <div className="flex flex-col items-center justify-center p-5 rounded-2xl bg-white/3 border border-white/5 hover:bg-white/5 hover:border-white/10 hover:translate-y-[-4px] transition-all duration-500 group relative overflow-hidden">
+       <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+       <div className="mb-3 opacity-60 group-hover:opacity-100 transition-all transform group-hover:scale-125 duration-500">{icon}</div>
+       <span className="text-2xl font-black text-white tracking-tighter tabular-nums">{value}</span>
+       <span className="text-[9px] text-muted-foreground/40 uppercase tracking-[0.2em] font-black mt-1 group-hover:text-purple-400/60 transition-colors">{label}</span>
     </div>
   )
 }
