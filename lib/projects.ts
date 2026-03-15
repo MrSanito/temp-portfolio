@@ -11,6 +11,41 @@ export interface Project {
 
 export const projectsData: Project[] = [
     {
+        id: "solobuild",
+        title: "SoloBuild",
+        description: "AI-powered workflow automation platform. Streamlining business processes with intelligent, scalable automation engines.",
+        tech_stack: ["Next.js", "TypeScript", "AI", "PostgreSQL"],
+        demo_link: "https://solobuild.vercel.app/",
+        image_url: "/project-solobuild.png",
+        status: "deployed"
+    },
+    {
+        id: "flipconcept",
+        title: "FlipConcept India",
+        description: "India's Leading Waterproofing Experts. Delivering engineering-grade protection for industrial and residential structures.",
+        tech_stack: ["Next.js", "Tailwind CSS", "Framer Motion"],
+        demo_link: "https://flipconceptindia.com/",
+        image_url: "/project-flipconcept.png",
+        status: "deployed"
+    },
+    {
+        id: "quiz-master-turbo",
+        title: "Quiz Master Turbo",
+        description: "A real-time comprehensive quiz platform with live analytics, dashboard, and multiplayer support. Built for high scalability.",
+        tech_stack: ["Next.js", "TypeScript", "PostgreSQL", "WebSockets"],
+        github_link: "https://github.com/MrSanito/quizMasterTurbo",
+        demo_link: "https://quiz-master-turbo-quiz-master.vercel.app/dashboard",
+        image_url: "/project-quizmaster.png",
+        status: "deployed"
+    },
+    {
+        id: "tomato",
+        title: "Tomato (Zomato Clone)",
+        description: "Enterprise-grade food delivery system built with microservices. Highly scalable architecture with real-time tracking.",
+        tech_stack: ["Microservices", "Kubernetes", "Docker", "RabbitMQ"],
+        status: "built"
+    },
+    {
         id: "vte",
         title: "Vishal Tools Enterprise",
         description: "Precision Engineering Redefined. World-class industrial machinery and custom engineering solutions delivered globally.",
@@ -21,31 +56,14 @@ export const projectsData: Project[] = [
         status: "deployed"
     },
     {
-        id: "quiz-master-turbo",
-        title: "Quiz Master Turbo",
-        description: "A real-time comprehensive quiz platform with live analytics, dashboard, and multiplayer support. Built for high scalability and performance.",
-        tech_stack: ["Next.js", "TypeScript", "PostgreSQL", "Turborepo", "WebSockets"],
-        github_link: "https://github.com/MrSanito/quizMasterTurbo",
-        demo_link: "https://quiz-master-turbo-quiz-master.vercel.app/dashboard",
-        image_url: "/project-quizmaster.png",
-        status: "deployed"
-    },
-    {
         id: "portfolio",
         title: "Personal Portfolio",
-        description: "Modern, high-performance portfolio website built with Next.js 15, Framer Motion, and Tailwind CSS. Features dynamic content and interactive elements.",
+        description: "Modern, high-performance portfolio website built with Next.js 15, Framer Motion, and Tailwind CSS. Features dynamic interactive elements.",
         tech_stack: ["Next.js", "React", "Tailwind CSS", "Framer Motion"],
         github_link: "https://github.com/MrSanito/temp-portfolio",
         demo_link: "https://zynito.in",
         image_url: "/project-portfolio.png",
         status: "deployed"
-    },
-    {
-        id: "metaverse",
-        title: "Metaverse Platform",
-        description: "An immersive 3D virtual world platform enabling real-time interaction, customizable avatars, and virtual real estate management.",
-        tech_stack: ["Three.js", "WebRTC", "Socket.io", "Node.js"],
-        status: "building"
     }
 ];
 

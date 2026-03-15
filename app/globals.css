@@ -5,6 +5,20 @@ body {
   cursor: none;
   overflow-x: hidden;
   max-width: 100vw;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+body::-webkit-scrollbar,
+html::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, and Opera */
+}
+
+/* Aggressive custom scrollbar hiding */
+[class*="scrollbar"]::-webkit-scrollbar,
+[class*="simplebar"]::-webkit-scrollbar,
+[class*="ps__rail"] {
+  display: none !important;
 }
 
 @media (hover: none) {
