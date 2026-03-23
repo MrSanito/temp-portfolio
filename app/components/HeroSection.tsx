@@ -113,7 +113,7 @@ export default function HeroSection({ quote }: HeroSectionProps) {
                         {/* Using a Gojo Satoru style placeholder image */}
                         <img
                             src="/gojo-v1.png"
-                            alt="Profile"
+                            alt="Vishal (MrSanito) - Backend and AI/ML Engineer Profile"
                             className="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-500"
                         />
                       </div>
