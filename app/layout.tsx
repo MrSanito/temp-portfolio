@@ -17,6 +17,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "MrSanito | Full Stack Developer",
   description: "Portfolio of Vishal aka MrSanito. Featuring Quiz Master Turbo and other projects.",
+  verification: {
+    google: "kGg9dVXDQIDfsG4ViiNYTmSywWLRcsjH8Odq42Kibbw",
+  },
 };
 
 export default function RootLayout({
