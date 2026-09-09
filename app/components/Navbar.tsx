@@ -19,7 +19,10 @@ export default function Navbar() {
           <span>Zynito</span>
         </motion.div>
         <div className="flex gap-8 text-sm font-medium text-muted-foreground">
+           <a href="#experience" className="hover:text-foreground transition-colors">Experience</a>
+           <a href="#open-source" className="hover:text-foreground transition-colors">Open Source</a>
            <a href="#projects" className="hover:text-foreground transition-colors">Work</a>
+           <a href="/resume" target="_blank" rel="noreferrer" className="hover:text-foreground transition-colors">Resume</a>
            <a href="https://github.com/MrSanito" target="_blank" rel="noreferrer" className="hover:text-foreground transition-colors">GitHub</a>
         </div>
       </div>

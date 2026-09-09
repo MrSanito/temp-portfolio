@@ -5,6 +5,8 @@ import Navbar from "./components/Navbar";
 import HeroSection from "./components/HeroSection";
 import SkillsMarquee from "./components/SkillsMarquee";
 import AboutSection from "./components/AboutSection";
+import ExperienceSection from "./components/ExperienceSection";
+import OpenSourceSection from "./components/OpenSourceSection";
 import BentoGrid from "./components/BentoGrid";
 import Footer from "./components/Footer";
 import ScrollReveal from "./components/ui/ScrollReveal";
@@ -26,6 +28,14 @@ export default function Portfolio() {
 
       <ScrollReveal delay={0.3}>
         <AboutSection />
+      </ScrollReveal>
+
+      <ScrollReveal delay={0.33}>
+        <ExperienceSection />
+      </ScrollReveal>
+
+      <ScrollReveal delay={0.36}>
+        <OpenSourceSection />
       </ScrollReveal>
 
       <ScrollReveal delay={0.4}>

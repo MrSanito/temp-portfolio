@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { FiTerminal, FiLock, FiDownload, FiZap, FiCode } from "react-icons/fi";
+import { FiTerminal, FiLock, FiDownload, FiZap, FiCode, FiFileText } from "react-icons/fi";
 import { techStackData, toolkitData } from "@/lib/icons";
 import MagneticButton from "./ui/MagneticButton";
 import SpotlightCard from "./ui/SpotlightCard";
@@ -109,13 +109,12 @@ export default function AboutSection() {
                                 <div className="flex flex-col items-center gap-3 w-full md:w-auto">
                                     <MagneticButton className="w-full md:w-auto">
                                         <Link
-                                            href="/Vishal%20Resume%202026.pdf"
-                                            download="Vishal_Resume_2026.pdf"
+                                            href="/resume"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="w-full flex items-center justify-center gap-2 bg-purple-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-purple-700 transition-all shadow-lg shadow-purple-500/20 whitespace-nowrap"
                                         >
-                                            <FiDownload /> Download Resume     
+                                            <FiFileText /> View Resume     
                                         </Link>
                                     </MagneticButton>
                                 </div>
