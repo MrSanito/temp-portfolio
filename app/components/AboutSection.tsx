@@ -114,7 +114,7 @@ export default function AboutSection() {
                                             rel="noopener noreferrer"
                                             className="w-full flex items-center justify-center gap-2 bg-purple-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-purple-700 transition-all shadow-lg shadow-purple-500/20 whitespace-nowrap"
                                         >
-                                            <FiFileText /> View Resume     
+                                            <FiFileText /> View Resume
                                         </Link>
                                     </MagneticButton>
                                 </div>
