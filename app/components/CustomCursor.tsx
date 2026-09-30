@@ -2,8 +2,10 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
+import { usePathname } from "next/navigation";
 
 export default function CustomCursor() {
+  const pathname = usePathname();
   const cursorRef = useRef<HTMLDivElement>(null);
   const cursorFollowerRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
@@ -280,12 +282,13 @@ export default function CustomCursor() {
         </>
       )}
 
-      {/* 3. Oneko Pet */}
-      <div
-        ref={nekoElRef}
-        id="oneko"
-        aria-hidden="true"
-        style={{
+      {/* 3. Oneko Pet (hidden on 3D Gojo routes to avoid overlaying character) */}
+      {!pathname?.startsWith("/gojo") && (
+        <div
+          ref={nekoElRef}
+          id="oneko"
+          aria-hidden="true"
+          style={{
             width: "32px",
             height: "32px",
             position: "fixed",
@@ -296,8 +299,9 @@ export default function CustomCursor() {
             left: "50%",
             top: "50%",
             backgroundPosition: "-32px -32px",
-        }}
-      />
+          }}
+        />
+      )}
     </>,
     document.body
   );
