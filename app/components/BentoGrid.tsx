@@ -1,7 +1,7 @@
 "use client";
 
 import { projectsData, getRandomExcuse, Project } from "@/lib/projects";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { FiCode, FiGithub, FiExternalLink } from "react-icons/fi";
 import { useState, useEffect } from "react";
 import Image from "next/image";
@@ -20,128 +20,206 @@ const statusLabels = {
     building: "Building"
 };
 
+type FilterType = "all" | "personal" | "freelance";
+
 export default function BentoGrid() {
     const projects = projectsData;
     const [excuse, setExcuse] = useState("");
+    const [filter, setFilter] = useState<FilterType>("all");
 
     useEffect(() => {
         setExcuse(getRandomExcuse());
     }, []);
 
+    const filteredProjects = filter === "all"
+        ? projects
+        : projects.filter(p => p.category === filter);
+
+    const counts = {
+        all: projects.length,
+        personal: projects.filter(p => p.category === "personal").length,
+        freelance: projects.filter(p => p.category === "freelance").length
+    };
+
+    const tabs: { id: FilterType; label: string; count: number }[] = [
+        { id: "all", label: "All Projects", count: counts.all },
+        { id: "personal", label: "Personal", count: counts.personal },
+        { id: "freelance", label: "Freelance", count: counts.freelance }
+    ];
+
     return (
         <section id="projects" className="py-24 px-4 sm:px-6">
-            <div className="max-w-7xl mx-auto space-y-16">
-                <motion.div 
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="flex flex-col gap-4"
-                >
-                    <h2 className="text-4xl md:text-6xl font-bold tracking-tighter">
-                        Selected <span className="text-purple-500">Works</span>
-                    </h2>
-                    <p className="text-muted-foreground text-lg max-w-2xl">
-                        A showcase of my technical journey. From full-stack applications to experimental ideas.
-                    </p>
-                </motion.div>
+            <div className="max-w-7xl mx-auto space-y-12">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2">
+                    <motion.div 
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="flex flex-col gap-4"
+                    >
+                        <h2 className="text-4xl md:text-6xl font-bold tracking-tighter">
+                            Selected <span className="text-purple-500">Works</span>
+                        </h2>
+                        <p className="text-muted-foreground text-lg max-w-2xl">
+                            A curated showcase of my personal ventures and production freelance client engineering work.
+                        </p>
+                    </motion.div>
+
+                    {/* Filter Tabs */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 15 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-zinc-900/70 border border-white/10 backdrop-blur-md self-start md:self-end"
+                    >
+                        {tabs.map((tab) => {
+                            const isActive = filter === tab.id;
+                            return (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setFilter(tab.id)}
+                                    className={`relative px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 flex items-center gap-2 ${
+                                        isActive
+                                            ? "text-white"
+                                            : "text-white/40 hover:text-white/80"
+                                    }`}
+                                >
+                                    {isActive && (
+                                        <motion.div
+                                            layoutId="activeProjectFilter"
+                                            className="absolute inset-0 rounded-xl bg-purple-600/30 border border-purple-500/40 shadow-inner"
+                                            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                                        />
+                                    )}
+                                    <span className="relative z-10">{tab.label}</span>
+                                    <span className={`relative z-10 text-[10px] px-1.5 py-0.5 rounded-md font-mono ${
+                                        isActive
+                                            ? "bg-purple-500/30 text-purple-200"
+                                            : "bg-white/5 text-white/40"
+                                    }`}>
+                                        {tab.count}
+                                    </span>
+                                </button>
+                            );
+                        })}
+                    </motion.div>
+                </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {projects.map((project, index) => (
-                        <motion.div
-                            key={project.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: index * 0.1 }}
-                            className="h-full" // Ensure motion div takes height for grid
-                        >
-                            <SpotlightCard className="group bg-zinc-900/50 border border-white/10 rounded-3xl overflow-hidden hover:border-purple-500/50 hover:shadow-2xl transition-all duration-300 flex flex-col h-full">
-                                {/* Project Image Container */}
-                                <div className="relative aspect-video w-full bg-[#050505] overflow-hidden group-hover:bg-zinc-950 transition-colors flex items-center justify-center p-6">
-                                    <div className={`absolute top-4 left-4 z-20 ${statusColors[project.status].split(" ")[0]} w-1.5 h-1.5 rounded-full animate-pulse`} />
-                                    <span className="absolute top-3 left-7 z-20 text-[9px] font-black uppercase tracking-[0.15em] text-white/50 bg-white/5 backdrop-blur-md px-2 py-0.5 rounded-full border border-white/5">
-                                        {statusLabels[project.status]}
-                                    </span>
-    
-                                    {project.image_url ? (
-                                        <Image
-                                            src={project.image_url}
-                                            alt={`${project.title} - ${project.description.slice(0, 50)}...`}
-                                            fill
-                                            className="object-contain transition-all duration-700 group-hover:scale-[1.03] group-hover:-translate-y-1"
-                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                        />
-                                    ) : (
-                                        <div className="absolute inset-0 flex items-center justify-center flex-col p-6">
-                                            <div className="absolute inset-0 bg-grid-white/[0.01]" />
-                                            <FiCode className="w-10 h-10 text-white/5 mx-auto mb-2 group-hover:text-purple-500/30 transition-colors transform group-hover:scale-110 duration-500" />
-                                            <span className="text-white/10 font-mono text-[9px] tracking-widest uppercase">No Preview</span>
+                    <AnimatePresence mode="popLayout">
+                        {filteredProjects.map((project) => (
+                            <motion.div
+                                key={project.id}
+                                layout
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.95 }}
+                                transition={{ duration: 0.25 }}
+                                className="h-full"
+                            >
+                                <SpotlightCard className="group bg-zinc-900/50 border border-white/10 rounded-3xl overflow-hidden hover:border-purple-500/50 hover:shadow-2xl transition-all duration-300 flex flex-col h-full">
+                                    {/* Project Image Container */}
+                                    <div className="relative aspect-video w-full bg-[#050505] overflow-hidden group-hover:bg-zinc-950 transition-colors flex items-center justify-center p-6">
+                                        {/* Status Badge */}
+                                        <div className={`absolute top-4 left-4 z-20 ${statusColors[project.status].split(" ")[0]} w-1.5 h-1.5 rounded-full animate-pulse`} />
+                                        <span className="absolute top-3 left-7 z-20 text-[9px] font-black uppercase tracking-[0.15em] text-white/50 bg-white/5 backdrop-blur-md px-2 py-0.5 rounded-full border border-white/5">
+                                            {statusLabels[project.status]}
+                                        </span>
+
+                                        {/* Category Badge (Personal vs Freelance) */}
+                                        {project.category === "personal" ? (
+                                            <span className="absolute top-3 right-4 z-20 text-[9px] font-black uppercase tracking-[0.15em] text-purple-300 bg-purple-500/20 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-purple-500/30 flex items-center gap-1.5 shadow-[0_0_12px_rgba(168,85,247,0.2)]">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
+                                                Personal Project
+                                            </span>
+                                        ) : (
+                                            <span className="absolute top-3 right-4 z-20 text-[9px] font-black uppercase tracking-[0.15em] text-cyan-300 bg-cyan-500/10 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-cyan-500/20 flex items-center gap-1.5">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                                                Freelance
+                                            </span>
+                                        )}
+        
+                                        {project.image_url ? (
+                                            <Image
+                                                src={project.image_url}
+                                                alt={`${project.title} - ${project.description.slice(0, 50)}...`}
+                                                fill
+                                                className="object-contain transition-all duration-700 group-hover:scale-[1.03] group-hover:-translate-y-1"
+                                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                            />
+                                        ) : (
+                                            <div className="absolute inset-0 flex items-center justify-center flex-col p-6">
+                                                <div className="absolute inset-0 bg-grid-white/[0.01]" />
+                                                <FiCode className="w-10 h-10 text-white/5 mx-auto mb-2 group-hover:text-purple-500/30 transition-colors transform group-hover:scale-110 duration-500" />
+                                                <span className="text-white/10 font-mono text-[9px] tracking-widest uppercase">No Preview</span>
+                                            </div>
+                                        )}
+                                    </div>
+        
+                                    <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between">
+                                        <div className="space-y-4">
+                                            <div className="flex justify-between items-start">
+                                                <h3 className="text-xl font-black group-hover:text-purple-400 transition-colors tracking-tight">
+                                                    {project.title}
+                                                </h3>
+                                            </div>
+        
+                                            <p className="text-[13px] text-muted-foreground/70 leading-relaxed line-clamp-2 font-medium">
+                                                {project.description}
+                                            </p>
+        
+                                            <div className="flex flex-wrap gap-1.5">
+                                                {project.tech_stack.map((tech) => (
+                                                    <span 
+                                                        key={tech} 
+                                                        className="px-2.5 py-0.5 rounded-md bg-white/5 border border-white/5 text-[9px] font-bold text-purple-300/50 uppercase tracking-wider"
+                                                    >
+                                                        {tech}
+                                                    </span>
+                                                ))}
+                                            </div>
                                         </div>
-                                    )}
-                                </div>
-    
-                                <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between">
-                                    <div className="space-y-4">
-                                        <div className="flex justify-between items-start">
-                                            <h3 className="text-xl font-black group-hover:text-purple-400 transition-colors tracking-tight">
-                                                {project.title}
-                                            </h3>
-                                        </div>
-    
-                                        <p className="text-[13px] text-muted-foreground/70 leading-relaxed line-clamp-2 font-medium">
-                                            {project.description}
-                                        </p>
-    
-                                        <div className="flex flex-wrap gap-1.5">
-                                            {project.tech_stack.map((tech) => (
-                                                <span 
-                                                    key={tech} 
-                                                    className="px-2.5 py-0.5 rounded-md bg-white/5 border border-white/5 text-[9px] font-bold text-purple-300/50 uppercase tracking-wider"
+        
+                                        <div className="flex gap-4 pt-4 mt-auto border-t border-white/5">
+                                            {project.github_link ? (
+                                                <a
+                                                    href={project.github_link}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-purple-400 transition-colors"
                                                 >
-                                                    {tech}
+                                                    <FiGithub className="w-3.5 h-3.5" /> Source
+                                                </a>
+                                            ) : (
+                                                <span className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/10 cursor-not-allowed">
+                                                    <FiGithub className="w-3.5 h-3.5" /> Locked
                                                 </span>
-                                            ))}
+                                            )}
+        
+                                            {project.demo_link ? (
+                                                <a
+                                                    href={project.demo_link}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-purple-400 transition-colors"
+                                                >
+                                                    <FiExternalLink className="w-3.5 h-3.5" /> Demo
+                                                </a>
+                                            ) : (
+                                                <span className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/10 cursor-not-allowed">
+                                                    <FiExternalLink className="w-3.5 h-3.5" /> Pending
+                                                </span>
+                                            )}
                                         </div>
                                     </div>
-    
-                                    <div className="flex gap-4 pt-4 mt-auto border-t border-white/5">
-                                        {project.github_link ? (
-                                            <a
-                                                href={project.github_link}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-purple-400 transition-colors"
-                                            >
-                                                <FiGithub className="w-3.5 h-3.5" /> Source
-                                            </a>
-                                        ) : (
-                                            <span className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/10 cursor-not-allowed">
-                                                <FiGithub className="w-3.5 h-3.5" /> Locked
-                                            </span>
-                                        )}
-    
-                                        {project.demo_link ? (
-                                            <a
-                                                href={project.demo_link}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-purple-400 transition-colors"
-                                            >
-                                                <FiExternalLink className="w-3.5 h-3.5" /> Demo
-                                            </a>
-                                        ) : (
-                                            <span className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/10 cursor-not-allowed">
-                                                <FiExternalLink className="w-3.5 h-3.5" /> Pending
-                                            </span>
-                                        )}
-                                    </div>
-                                </div>
-                            </SpotlightCard>
-                        </motion.div>
-                    ))}
+                                </SpotlightCard>
+                            </motion.div>
+                        ))}
+                    </AnimatePresence>
 
                     {/* Coming Soon Card */} 
                     <motion.div
+                        layout
                         initial={{ opacity: 0, scale: 0.95 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
@@ -161,6 +239,7 @@ export default function BentoGrid() {
                     
                     {/* Github Stats Card */}
                      <motion.div
+                       layout
                        initial={{ opacity: 0, scale: 0.95 }}
                        whileInView={{ opacity: 1, scale: 1 }}
                        viewport={{ once: true }}
